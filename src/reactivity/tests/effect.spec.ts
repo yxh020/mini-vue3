@@ -5,17 +5,29 @@ describe("effect", () => {
   it("happy path", () => {
     const user = reactive({
       age: 10,
+      name: {
+        age: 20
+      }
     });
 
     let nextAge;
+    let nextAge2;
+
     effect(() => {
       nextAge = user.age + 1;
+      nextAge2 = user.name.age +1
     });
 
     expect(nextAge).toBe(11);
+    expect(nextAge2).toBe(21);
+
 
     user.age++;
+    user.name.age++;
+
     expect(nextAge).toBe(12);
+    expect(nextAge2).toBe(22);
+
   });
 
   it("should return runner when call effect", () => {
@@ -66,7 +78,8 @@ describe("effect", () => {
     expect(dummy).toBe(2);
     
     stop(runner);
-    obj.prop = 3;
+    // obj.prop = 3;
+    obj.prop++
     expect(dummy).toBe(2);
 
     runner();
